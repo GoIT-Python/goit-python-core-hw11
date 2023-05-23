@@ -1,3 +1,3 @@
-from ui import AddressBook
+from ui.ui import AddressBook
 
 book = AddressBook()

@@ -1,8 +1,10 @@
-from commands.good_bye import good_bye
-from commands.close import close
-from commands.exit import exit
-from commands.hello import hello
-from commands.add import add
-from commands.change import change
-from commands.phone import phone
-from commands.show_all import show_all
+from .good_bye import good_bye
+from .close import close
+from .phone import phone
+from .add import add
+from .exit import exit_from
+from .show_all import show_all
+from .change import change
+from .hello import hello
+
+# __all__ = ['good_bye', 'show_all']

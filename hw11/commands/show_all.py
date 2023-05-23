@@ -1,8 +1,10 @@
+# from contacts import book
+
 from contacts import book
 
 
 def show_all(*args, **kwargs):
-    print(book.get_records())
+    book.get_records()
 
 
 if __name__ == "__main__":

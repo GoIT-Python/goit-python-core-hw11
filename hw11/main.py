@@ -1,11 +1,12 @@
 from command_generator import command_generator
+from commands import good_bye, close, hello, add, change, phone, show_all, exit_from
 
-from commands import good_bye, close, hello, add, change, phone, show_all
+# from .commands import *
 
 COMMANDS = {
     "good bye": good_bye,
     "close": close,
-    "exit": exit,
+    "exit": exit_from,
     "hello": hello,
     "add": add,
     "change": change,

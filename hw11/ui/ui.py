@@ -2,6 +2,21 @@ from collections import UserDict
 
 
 class AddressBook(UserDict):
+    NUMBER_RECORDS = 10
+
+    def __init__(self):
+        super().__init__()
+        self.value = 0
+
+    def __next__(self):
+        if self.value >= self.NUMBER_RECORDS:
+            raise StopIteration
+        self.value += 1
+        return self.value
+
+    def __iter__(self):
+        return self.get_records()
+
     def get_records(self):
         for key, value in self.data.items():
             print(key.name, value)
