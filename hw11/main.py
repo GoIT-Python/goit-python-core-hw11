@@ -1,6 +1,6 @@
 from command_generator import command_generator
 
-from commands import *
+from commands import good_bye, close, hello, add, change, phone, show_all
 
 COMMANDS = {
     "good bye": good_bye,
