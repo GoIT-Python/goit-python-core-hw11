@@ -2,10 +2,9 @@ from collections import UserDict
 
 
 class AddressBook(UserDict):
-    NUMBER_RECORDS = 10
-
     def __init__(self):
         super().__init__()
+        self.NUMBER_RECORDS = None
         self.value = 0
 
     def __next__(self):
@@ -15,7 +14,16 @@ class AddressBook(UserDict):
         return self.value
 
     def __iter__(self):
-        return self.get_records()
+        return self
+
+    def iterator(self, n):
+        self.NUMBER_RECORDS = n
+        if self.data:
+            data_list = list(self.data)[:n]
+            for key in data_list:
+                print(key, self.data.get(key))
+        else:
+            print('No records found')
 
     def get_records(self):
         for key, value in self.data.items():
@@ -63,8 +71,8 @@ class Name(Field):
         super().__init__()
         self.name = name
 
-    # def __str__(self):
-    #     return self.name
+    def __str__(self):
+        return self.name
 
 
 class Phone(Field):

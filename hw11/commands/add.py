@@ -1,4 +1,4 @@
-from ui import *
+from ui import Name, Record
 from contacts import book
 
 
