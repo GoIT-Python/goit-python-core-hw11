@@ -1,5 +1,6 @@
 from collections import UserDict
 from datetime import datetime, timedelta
+import re
 
 
 class AddressBook(UserDict):
@@ -39,14 +40,14 @@ class AddressBook(UserDict):
 
 
 class Record:
-    def __init__(self, name, phone=None, birthday=None):
+    def __init__(self, name, phone=None, b_day=None):
         if phone is None:
             phone = []
-        if birthday is None:
-            bd = ''
+        if b_day is None:
+            b_day = ''
         self.name = name
         self.phone = phone
-        self.bd = birthday
+        self.b_day = b_day
 
     def add_phone(self, item):
         if item not in self.phone:
@@ -68,20 +69,32 @@ class Record:
         now = datetime.now()
         ts_now = now.timestamp()
         one_year_interval = timedelta(weeks=52)
-        birthday = datetime.strptime(self.bd.birthday, '%d-%m-%Y').date()
-        ts_bd_0 = datetime(year=now.year, month=birthday.month, day=birthday.day).timestamp()
+        bd = datetime.strptime(self.b_day, '%d-%m-%Y').date()
+        ts_bd_0 = datetime(year=now.year, month=bd.month, day=bd.day).timestamp()
         delta = (ts_bd_0 - ts_now) // (24 * 3600) + 1
         if delta > 0:
-            print(int(delta))
+            print(f'Days until next birthday: {int(delta)}')
         elif delta < 0:
-            print(int(delta + one_year_interval.days + 1))
+            print(f'Days until next birthday: {int(delta + one_year_interval.days + 1)}')
         else:
             print('Say Happy Birthday to contact today!')
 
 
 class Field:
     def __init__(self):
-        pass
+        self.data = {}
+
+    def __setitem__(self, key, value):
+        if key in self.data:
+            self.data[key].append(value)
+        else:
+            self.data[key] = [value]
+
+    def __getitem__(self, key):
+        result = str(self.data[key][0])
+        for value in self.data[key][1:]:
+            result += ', ' + str(value)
+        return result
 
 
 class Name(Field):
@@ -94,23 +107,54 @@ class Name(Field):
 
 
 class Phone(Field):
-    def __init__(self, phone=""):
+    def __init__(self):
         super().__init__()
-        self.phone = phone
+        self.__value = None
+
+    @property
+    def value(self):
+        return self.__value
+
+    @value.setter
+    def value(self, phone):
+        if phone.isdigit():
+            self.__value = phone
+        else:
+            print('Only digits are accepted')
 
     def __str__(self):
-        return self.phone
+        return self.__value
 
 
 class Birthday(Field):
-    def __init__(self, birthday):
+    def __init__(self):
         super().__init__()
-        self.birthday = birthday
+        self.__value = None
+
+    @property
+    def value(self):
+        return self.__value
+
+    @value.setter
+    def value(self, b_day):
+        regex = r'(\d\d)-(\d\d)-(\d\d\d\d)'
+        if re.search(regex, b_day):
+            self.__value = b_day
+        else:
+            raise ValueError('Only date in format DD-MM-YYYY is accepted')
 
     def __str__(self):
-        return self.birthday
+        return self.__value
 
 
 record = Record('Boris')
-record.bd = Birthday('23-05-1980')
+
+# phone = Phone()
+# phone[0] = '123456789'
+# phone[1] = '876544567'
+# print(phone[0], phone[1])
+
+birthday = Birthday()
+birthday[0] = '24-05-2000'
+record.b_day = birthday[0]
 record.days_to_birthday()
