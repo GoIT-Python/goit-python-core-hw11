@@ -1,4 +1,5 @@
 from collections import UserDict
+from datetime import datetime, timedelta
 
 
 class AddressBook(UserDict):
@@ -38,11 +39,14 @@ class AddressBook(UserDict):
 
 
 class Record:
-    def __init__(self, name, phone=None):
+    def __init__(self, name, phone=None, birthday=None):
         if phone is None:
             phone = []
+        if birthday is None:
+            bd = ''
         self.name = name
         self.phone = phone
+        self.bd = birthday
 
     def add_phone(self, item):
         if item not in self.phone:
@@ -59,6 +63,20 @@ class Record:
     def edit_phone(self, item):
         self.phone.clear()
         self.phone.append(item)
+
+    def days_to_birthday(self):
+        now = datetime.now()
+        ts_now = now.timestamp()
+        one_year_interval = timedelta(weeks=52)
+        birthday = datetime.strptime(self.bd.birthday, '%d-%m-%Y').date()
+        ts_bd_0 = datetime(year=now.year, month=birthday.month, day=birthday.day).timestamp()
+        delta = (ts_bd_0 - ts_now) // (24 * 3600) + 1
+        if delta > 0:
+            print(int(delta))
+        elif delta < 0:
+            print(int(delta + one_year_interval.days + 1))
+        else:
+            print('Say Happy Birthday to contact today!')
 
 
 class Field:
@@ -82,3 +100,17 @@ class Phone(Field):
 
     def __str__(self):
         return self.phone
+
+
+class Birthday(Field):
+    def __init__(self, birthday):
+        super().__init__()
+        self.birthday = birthday
+
+    def __str__(self):
+        return self.birthday
+
+
+record = Record('Boris')
+record.bd = Birthday('23-05-1980')
+record.days_to_birthday()
