@@ -130,6 +130,10 @@ class Birthday(Field):
     def __init__(self):
         super().__init__()
         self.__value = None
+        self.data = {}
+
+    def __setitem__(self, _, value):
+        self.data[0] = [value]
 
     @property
     def value(self):
@@ -149,12 +153,13 @@ class Birthday(Field):
 
 record = Record('Boris')
 
-# phone = Phone()
-# phone[0] = '123456789'
-# phone[1] = '876544567'
-# print(phone[0], phone[1])
+phone = Phone()
+phone[0] = '123456789'
+phone[1] = '876544567'
+print(phone[0], phone[1])
 
 birthday = Birthday()
-birthday[0] = '24-05-2000'
+birthday[0] = '27-05-2000'
+print(birthday[0])
 record.b_day = birthday[0]
 record.days_to_birthday()
